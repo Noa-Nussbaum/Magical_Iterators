@@ -9,7 +9,7 @@ namespace ariel{
 
     class MagicalContainer{
 
-        vector<int*> team;
+        vector<int> elements;
 
         private:
             void add(int* element);
