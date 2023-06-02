@@ -17,8 +17,8 @@ namespace ariel{
             // Copy constructor
             MagicalContainer(MagicalContainer& other);
 
-            void add(int* element);
-            void remove(int* element);
+            void addElement(int element);
+            void removeElement(int element);
             int size() const;
 
             class AscendingIterator;
