@@ -10,10 +10,8 @@ namespace ariel{
        
     void MagicalContainer::add(int* element){}
     void MagicalContainer::remove(int* element){}
-    int MagicalContainer::size(){
+    int MagicalContainer::size() const{
         return 0;
     }
 
-
 }
-
