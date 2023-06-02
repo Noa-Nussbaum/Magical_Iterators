@@ -20,6 +20,7 @@ namespace ariel{
             void addElement(int element);
             void removeElement(int element);
             int size() const;
+            // int getElement(int index);
 
             class AscendingIterator;
             class SideCrossIterator;
