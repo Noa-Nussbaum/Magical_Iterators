@@ -1,4 +1,5 @@
 #include "MagicalContainer.hpp"
+#include <stdexcept>
 
 
 using namespace std;
@@ -9,12 +10,30 @@ namespace ariel{
     // Default constructor
     MagicalContainer::MagicalContainer(){}
     // Copy constructor
-    MagicalContainer::MagicalContainer(MagicalContainer& other){}
+    MagicalContainer::MagicalContainer(MagicalContainer& other){
+        container=other.container;
+    }
 
-    void MagicalContainer::addElement(int element){}
-    void MagicalContainer::removeElement(int element){}
+    void MagicalContainer::addElement(int element){
+        container.push_back(element);
+    }
+    void MagicalContainer::removeElement(int element){
+        bool answer = false;
+        if(container.empty()){
+            throw runtime_error("The container is empty");
+        }
+        for(auto i = container.begin(); i!=container.end(); i++){
+            if(*i == element){
+                container.erase(i);
+                answer = true;
+            }
+        }
+        if(answer == false){
+            throw runtime_error("Element not found for erasing");
+        }
+    }
     int MagicalContainer::size() const{
-        return 0;
+        return container.size();
     }
 
     class AscendingIterator;
