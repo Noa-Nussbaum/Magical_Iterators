@@ -66,20 +66,35 @@ namespace ariel{
         return other.index != index;
     }
     bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator& other) const{
-        return other.index > index;
+        return other.index < index;
     }
     bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator& other) const{
-        return other.index < index;    
+        return other.index > index;    
         }
     int MagicalContainer::AscendingIterator::operator*(){
-        sort(this->begin(), this->end());
-        return container.container[index];
-        // return this->container.container[index];
+        if (index >= container.container.size()) {
+            throw runtime_error("Iterator out of range");
+        }
+
+        // Create a copy of the container's elements
+        vector<int> sortedElements = container.container;
+
+        // Sort the elements in ascending order
+        sort(sortedElements.begin(), sortedElements.end());
+
+        // Return the element at the current index
+        return sortedElements[static_cast<std::vector<int>::size_type>(index)];
     }
+
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::operator++(){
+        if (index+1 > container.container.size()) {
+            throw runtime_error("Iterator out of range");
+        }
         index++;
         return *this;
     }
+
+
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin(){
         AscendingIterator *answer = new AscendingIterator(container);
         answer->index=0;
@@ -87,44 +102,71 @@ namespace ariel{
 
     }
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end(){
-        return *this;
+        AscendingIterator *answer = new AscendingIterator(container);
+        answer->index=container.size();
+        return *answer;
     }
 
 
-
     // Constructors
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container):container(container){}
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator& other):container(other.container){}
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container):container(container), leftIndex(0), rightIndex(container.size()), left(false){}
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator& other):container(other.container), leftIndex(0), rightIndex(container.size()), left(false){}
     // Destructor
     MagicalContainer::SideCrossIterator::~SideCrossIterator(){}
 
     // Operators
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator& other){
+        // if(!(&other==this)){
+        //     if(&container != &(other.container)){
+        //         throw runtime_error("Different containers");
+        //     }
+        //     index = other.index;
+        // }
         return *this;
     }
     bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator& other) const{
-        return false;
+        return other.rightIndex == rightIndex && other.leftIndex == leftIndex;
     }
     bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator& other) const{
-        return false;
+        return other.rightIndex != rightIndex && other.leftIndex != leftIndex;;
     }
     bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator& other) const{
-        return false;
+        return leftIndex>other.leftIndex && rightIndex>other.rightIndex;
     }
     bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator& other) const{
-        return false;
+        return leftIndex<other.leftIndex && rightIndex<other.rightIndex;
     }
     int MagicalContainer::SideCrossIterator::operator*(){
-       return 0;
+        if (leftIndex >= container.container.size()/2 || rightIndex <= container.container.size()/2) {
+            throw runtime_error("Iterator out of range");
+        }
+        // Create a copy of the container's elements
+        vector<int> sortedElements = container.container;
+
+        // Sort the elements in ascending order
+        sort(sortedElements.begin(), sortedElements.end());
+
+        if(left){
+            return sortedElements[static_cast<std::vector<int>::size_type>(leftIndex)];
+        }
+        // Return the element at the current index
+        return sortedElements[static_cast<std::vector<int>::size_type>(rightIndex)];
     }
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++(){
         return *this;
     }
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin(){
-        return *this;
+        SideCrossIterator *answer = new SideCrossIterator(container);
+        answer->leftIndex=0;
+        answer->rightIndex=answer->container.size();
+        return *answer;
     }
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end(){
-        return *this;
+        // Finish this
+        SideCrossIterator *answer = new SideCrossIterator(container);
+        // if(container.size)
+        answer->rightIndex=answer->container.size()/2;
+        return *answer;
     }
 
 

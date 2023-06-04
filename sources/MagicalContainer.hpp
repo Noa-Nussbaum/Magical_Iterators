@@ -59,7 +59,10 @@ namespace ariel{
 
         private:
             const MagicalContainer& container;
-            
+            int rightIndex;
+            int leftIndex;
+            bool left;
+
         
         public:
             // Constructors
