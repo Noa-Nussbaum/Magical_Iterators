@@ -42,35 +42,49 @@ namespace ariel{
 
 
     // Constructors
-    MagicalContainer::AscendingIterator::AscendingIterator(const MagicalContainer& container):container(container){}
-    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator& other):container(other.container){}
+    MagicalContainer::AscendingIterator::AscendingIterator(const MagicalContainer& container):container(container), index(0){
+    }
+    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator& other):container(other.container),index(other.index){}
+    // MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator& other, int index):container(other.container),index(index){}
+
     // Destructor
     MagicalContainer::AscendingIterator::~AscendingIterator(){}
-
     // Operators
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::operator=(const AscendingIterator& other){
+        if(!(&other==this)){
+            if(&container != &(other.container)){
+                throw runtime_error("Different containers");
+            }
+            index = other.index;
+        }
         return *this;
     }
     bool MagicalContainer::AscendingIterator::operator==(const AscendingIterator& other) const{
-        return false;
+        return other.index == index;
     }
     bool MagicalContainer::AscendingIterator::operator!=(const AscendingIterator& other) const{
-        return false;
+        return other.index != index;
     }
     bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator& other) const{
-        return false;
+        return other.index > index;
     }
     bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator& other) const{
-        return false;
-    }
+        return other.index < index;    
+        }
     int MagicalContainer::AscendingIterator::operator*(){
-        return 0;
+        sort(this->begin(), this->end());
+        return container.container[index];
+        // return this->container.container[index];
     }
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::operator++(){
+        index++;
         return *this;
     }
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin(){
-        return *this;
+        AscendingIterator *answer = new AscendingIterator(container);
+        answer->index=0;
+        return *answer;
+
     }
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end(){
         return *this;
@@ -101,7 +115,7 @@ namespace ariel{
         return false;
     }
     int MagicalContainer::SideCrossIterator::operator*(){
-        return 0;
+       return 0;
     }
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++(){
         return *this;

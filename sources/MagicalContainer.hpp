@@ -32,11 +32,13 @@ namespace ariel{
 
         private:
             const MagicalContainer& container;
+            int index;
         
         public:
             // Constructors
             AscendingIterator(const MagicalContainer& container);
             AscendingIterator(const AscendingIterator& other);
+            
             // Destructor
             ~AscendingIterator();
 
@@ -57,6 +59,7 @@ namespace ariel{
 
         private:
             const MagicalContainer& container;
+            
         
         public:
             // Constructors
