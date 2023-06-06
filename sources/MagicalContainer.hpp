@@ -17,6 +17,21 @@ namespace ariel{
             MagicalContainer();
             // Copy constructor
             MagicalContainer(MagicalContainer& other);
+
+            // Declare move constructor as deleted
+            MagicalContainer(MagicalContainer&&) = delete;
+
+            // Declare move assignment operator as deleted
+            MagicalContainer& operator=(MagicalContainer&&) = delete;
+
+            // Delete copy assignment operator
+            MagicalContainer& operator=(const MagicalContainer&) = delete;
+
+            // Destructor
+            ~MagicalContainer();
+
+            void deleteElementByValue(std::vector<int>& vec, int value);
+
             bool isPrime(int number);
             void addElement(int element);
             void removeElement(int element);
@@ -39,6 +54,12 @@ namespace ariel{
             // Constructors
             AscendingIterator(const MagicalContainer& container);
             AscendingIterator(const AscendingIterator& other);
+            
+            // Declare move constructor as deleted
+            AscendingIterator(AscendingIterator&&) = delete;
+
+            // Declare move assignment operator as deleted
+            AscendingIterator& operator=(AscendingIterator&&) = delete;
             
             // Destructor
             ~AscendingIterator();
@@ -70,6 +91,11 @@ namespace ariel{
             SideCrossIterator(const MagicalContainer& container);
             SideCrossIterator(const SideCrossIterator& other);
             SideCrossIterator(const MagicalContainer& container,int leftIndex, int rightIndex);
+            // Declare move constructor as deleted
+            SideCrossIterator(SideCrossIterator&&) = delete;
+
+            // Declare move assignment operator as deleted
+            SideCrossIterator& operator=(SideCrossIterator&&) = delete;
 
             // Destructor
             ~SideCrossIterator();
@@ -97,6 +123,13 @@ namespace ariel{
             // Constructors
             PrimeIterator(const MagicalContainer& container);
             PrimeIterator(const PrimeIterator& other);
+
+            // Declare move constructor as deleted
+            PrimeIterator(PrimeIterator&&) = delete;
+
+            // Declare move assignment operator as deleted
+            PrimeIterator& operator=(PrimeIterator&&) = delete;
+
             // Destructor
             ~PrimeIterator();
 
