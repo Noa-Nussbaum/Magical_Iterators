@@ -1,5 +1,6 @@
 #include "MagicalContainer.hpp"
 #include <stdexcept>
+#include <iostream>
 
 
 using namespace std;
@@ -109,36 +110,35 @@ namespace ariel{
 
 
     // Constructors
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container):container(container), leftIndex(0), rightIndex(container.size()), left(false){}
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator& other):container(other.container), leftIndex(0), rightIndex(container.size()), left(false){}
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container):container(container), leftIndex(0), rightIndex(container.size()), left(true){}
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator& other):container(other.container), leftIndex(other.leftIndex), rightIndex(other.rightIndex), left(other.left){}
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container,int leftIndex, int rightIndex):container(container), leftIndex(leftIndex), rightIndex(rightIndex), left(true){}
     // Destructor
     MagicalContainer::SideCrossIterator::~SideCrossIterator(){}
 
     // Operators
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator& other){
-        // if(!(&other==this)){
-        //     if(&container != &(other.container)){
-        //         throw runtime_error("Different containers");
-        //     }
-        //     index = other.index;
-        // }
+        leftIndex = other.leftIndex;
+        rightIndex = other.rightIndex;
+        left = other.left;
         return *this;
     }
     bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator& other) const{
         return other.rightIndex == rightIndex && other.leftIndex == leftIndex;
     }
     bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator& other) const{
-        return other.rightIndex != rightIndex && other.leftIndex != leftIndex;;
+        return !(other == *this);
     }
     bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator& other) const{
-        return leftIndex>other.leftIndex && rightIndex>other.rightIndex;
+        return leftIndex>other.leftIndex && rightIndex<other.rightIndex;
     }
     bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator& other) const{
-        return leftIndex<other.leftIndex && rightIndex<other.rightIndex;
+        return leftIndex<other.leftIndex && rightIndex>other.rightIndex;
     }
     int MagicalContainer::SideCrossIterator::operator*(){
-        if (leftIndex >= container.container.size()/2 || rightIndex <= container.container.size()/2) {
-            throw runtime_error("Iterator out of range");
+        if (leftIndex > container.container.size()/2 || rightIndex <= container.container.size()/2) {
+            cout << "Indexes " << leftIndex << rightIndex << endl;
+            throw runtime_error("Iterator is out of range");
         }
         // Create a copy of the container's elements
         vector<int> sortedElements = container.container;
@@ -153,20 +153,40 @@ namespace ariel{
         return sortedElements[static_cast<std::vector<int>::size_type>(rightIndex)];
     }
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++(){
+        cout << "left, right: " << leftIndex<< rightIndex << endl;
+        if(leftIndex < rightIndex){
+            if(left == true){
+                    rightIndex--;
+                    left = false;
+                }
+            else{
+                leftIndex++;
+                left = true;
+            }
+        
+        }
         return *this;
     }
+    
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin(){
-        SideCrossIterator *answer = new SideCrossIterator(container);
-        answer->leftIndex=0;
-        answer->rightIndex=answer->container.size();
-        return *answer;
+        return SideCrossIterator(container);
     }
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end(){
-        // Finish this
-        SideCrossIterator *answer = new SideCrossIterator(container);
-        // if(container.size)
-        answer->rightIndex=answer->container.size()/2;
-        return *answer;
+        int size = container.size()-1;
+        int start = 0;
+        int end = size;
+        // If even
+        if(size%2 == 0){
+            start = size/2;
+            end = size/2+1;
+            cout << start << end << endl;
+        }
+        // If odd
+        else{
+            start = size/2;
+            end = size/2;
+        }
+        return SideCrossIterator(container, start, end);
     }
 
 

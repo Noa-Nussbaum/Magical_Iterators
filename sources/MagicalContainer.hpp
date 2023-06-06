@@ -68,6 +68,8 @@ namespace ariel{
             // Constructors
             SideCrossIterator(const MagicalContainer& container);
             SideCrossIterator(const SideCrossIterator& other);
+            SideCrossIterator(const MagicalContainer& container,int leftIndex, int rightIndex);
+
             // Destructor
             ~SideCrossIterator();
 

@@ -25,7 +25,13 @@ int main() {
 
     // Use DescendingIterator to display elements in descending order
     std::cout << "Elements in cross order:\n";
+
+    container.removeElement(2);
+    std::cout << "Size of container after removing an element: " << container.size() << std::endl;
+
     MagicalContainer::SideCrossIterator crossIter(container);
+
+
     for (auto it = crossIter.begin(); it != crossIter.end(); ++it) {
         std::cout << *it << ' ';  // 2 25 3 17 9
     }
