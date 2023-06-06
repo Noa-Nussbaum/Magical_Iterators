@@ -100,33 +100,33 @@ TEST_CASE("SideCrossIterator") {
     }
 }
 
-// // Test case for the PrimeIterator
-// TEST_CASE("PrimeIterator") {
-//     MagicalContainer container;
-//     container.addElement(1);
-//     container.addElement(2);
-//     container.addElement(3);
-//     container.addElement(4);
-//     container.addElement(5);
-//     container.addElement(6);
+// Test case for the PrimeIterator
+TEST_CASE("PrimeIterator") {
+    MagicalContainer container;
+    container.addElement(1);
+    container.addElement(2);
+    container.addElement(3);
+    container.addElement(4);
+    container.addElement(5);
+    container.addElement(6);
 
-//     SUBCASE("Iterating over elements") {
-//         MagicalContainer::PrimeIterator it(container);
-//         CHECK(*it == 2);
-//         ++it;
-//         CHECK(*it == 3);
-//         ++it;
-//         CHECK(*it == 5);
-//         ++it;
-//         CHECK(it == it.end());
-//     }
+    SUBCASE("Iterating over elements") {
+        MagicalContainer::PrimeIterator it(container);
+        CHECK(*it == 2);
+        ++it;
+        CHECK(*it == 3);
+        ++it;
+        CHECK(*it == 5);
+        ++it;
+        CHECK(it == it.end());
+    }
 
-//     SUBCASE("Iterating over an empty container") {
-//         MagicalContainer emptyContainer;
-//         MagicalContainer::PrimeIterator it(emptyContainer);
-//         CHECK(it == it.end());
-//     }
-// }
+    SUBCASE("Iterating over an empty container") {
+        MagicalContainer emptyContainer;
+        MagicalContainer::PrimeIterator it(emptyContainer);
+        CHECK(it == it.end());
+    }
+}
 //--------------------------------------------------------------
 // Test case for comparing iterators from the same container
 TEST_CASE("Comparing iterators from the same container") {
@@ -153,14 +153,14 @@ TEST_CASE("Comparing iterators from the same container") {
         CHECK(!(it1 > it2));
     }
 
-//     SUBCASE("Comparing PrimeIterator with itself") {
-//         MagicalContainer::PrimeIterator it1(container);
-//         MagicalContainer::PrimeIterator it2(container);
-//         CHECK(it1 == it2);
-//         CHECK(!(it1 != it2));
-//         CHECK(!(it1 < it2));
-//         CHECK(!(it1 > it2));
-//     }
+    SUBCASE("Comparing PrimeIterator with itself") {
+        MagicalContainer::PrimeIterator it1(container);
+        MagicalContainer::PrimeIterator it2(container);
+        CHECK(it1 == it2);
+        CHECK(!(it1 != it2));
+        CHECK(!(it1 < it2));
+        CHECK(!(it1 > it2));
+    }
 }
 // //------------------------------------------------------
 // Test case for traversing the AscendingIterator

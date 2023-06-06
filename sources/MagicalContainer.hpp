@@ -90,6 +90,7 @@ namespace ariel{
 
         private:
             const MagicalContainer& container;
+            int index;
         
         public:
             // Constructors
@@ -97,6 +98,9 @@ namespace ariel{
             PrimeIterator(const PrimeIterator& other);
             // Destructor
             ~PrimeIterator();
+
+            vector<int> getContainer();
+            bool isPrime(int number);
 
             // Operators
             PrimeIterator& operator=(const PrimeIterator& other);

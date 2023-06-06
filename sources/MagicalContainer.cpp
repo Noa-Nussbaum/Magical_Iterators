@@ -1,6 +1,7 @@
 #include "MagicalContainer.hpp"
 #include <stdexcept>
 #include <iostream>
+#include <math.h>
 
 
 using namespace std;
@@ -197,37 +198,97 @@ namespace ariel{
 
 
     // Constructors
-    MagicalContainer::PrimeIterator::PrimeIterator(const MagicalContainer& container):container(container){}
-    MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator& other):container(other.container){}
+    MagicalContainer::PrimeIterator::PrimeIterator(const MagicalContainer& container):container(container), index(0){
+
+    }
+    
+    
+    MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator& other):container(other.container), index(other.index){}
     // Destructor
-        MagicalContainer::PrimeIterator::~PrimeIterator(){}
+    MagicalContainer::PrimeIterator::~PrimeIterator(){}
+
+    bool MagicalContainer::PrimeIterator::isPrime(int number){
+        if (number < 2)
+        return false;
+
+        for (int i = 2; i <= sqrt(number); ++i)
+        {
+            if (number % i == 0)
+                return false;
+        }
+        return true;
+    }
 
     // Operators
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator=(const PrimeIterator& other){
+        if(!(&other==this)){
+            if(&container != &(other.container)){
+                throw runtime_error("Different containers");
+            }
+            index = other.index;
+        }
         return *this;
     }
     bool MagicalContainer::PrimeIterator::operator==(const PrimeIterator& other) const{
-        return false;
+        return other.index == index;
     }
     bool MagicalContainer::PrimeIterator::operator!=(const PrimeIterator& other) const{
-        return false;
+        return other.index != index;
     }
     bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator& other) const{
-        return false;
+        return index>other.index;
     }
     bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator& other) const{
-        return false;
+        return index<other.index;
     }
     int MagicalContainer::PrimeIterator::operator*(){
-        return 0;
+        // if (index >= container.container.size()) {
+        //     throw runtime_error("Iterator out of range");
+        // }
+
+        // // Create a copy of the container's elements
+        // vector<int> sortedElements = container.container;
+
+        // // Sort the elements in ascending order
+        // sort(sortedElements.begin(), sortedElements.end());
+
+        // // Return the element at the current index
+        // return sortedElements[static_cast<std::vector<int>::size_type>(index)];
+
+        if (index >= container.size() || !isPrime(container.container[static_cast<std::vector<int>::size_type>(index)]))
+    {
+        throw std::runtime_error("Iterator out of range");
     }
-    MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator++(){
+    
+    std::vector<int> sortedElements = container.container;
+    std::sort(sortedElements.begin(), sortedElements.end());
+    
+    return sortedElements[static_cast<std::vector<int>::size_type>(index)];
+    }
+    vector<int> MagicalContainer::PrimeIterator::getContainer(){
+        return container.container;
+    }
+
+    MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator++() {
+        if (index+1 > container.container.size()) {
+                throw runtime_error("Iterator out of range");
+            }
+
+        index++;
+        while (index < container.size() && !isPrime(container.container[static_cast<std::vector<int>::size_type>(index)]))
+        {
+            index++;
+        }
         return *this;
     }
+
+
     MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin(){
+        index=0;
         return *this;
     }
     MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end(){
+        index=container.size();
         return *this;
     }
 
