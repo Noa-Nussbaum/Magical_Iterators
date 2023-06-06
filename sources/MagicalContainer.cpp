@@ -14,10 +14,26 @@ namespace ariel{
     // Copy constructor
     MagicalContainer::MagicalContainer(MagicalContainer& other){
         container=other.container;
+        primes=other.primes;
     }
 
     void MagicalContainer::addElement(int element){
         container.push_back(element);
+        if(isPrime(element)){
+            primes.push_back(element);
+        }
+    }
+
+    bool MagicalContainer::isPrime(int number){
+        if (number < 2)
+        return false;
+
+        for (int i = 2; i <= sqrt(number); ++i)
+        {
+            if (number % i == 0)
+                return false;
+        }
+        return true;
     }
     void MagicalContainer::removeElement(int element){
         bool answer = false;
@@ -111,7 +127,8 @@ namespace ariel{
 
 
     // Constructors
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container):container(container), leftIndex(0), rightIndex(container.size()), left(true){}
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container):container(container), leftIndex(0), rightIndex(container.size()), left(true){
+    }
     MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator& other):container(other.container), leftIndex(other.leftIndex), rightIndex(other.rightIndex), left(other.left){}
     MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container,int leftIndex, int rightIndex):container(container), leftIndex(leftIndex), rightIndex(rightIndex), left(true){}
     // Destructor
@@ -197,27 +214,15 @@ namespace ariel{
     }
 
 
+
     // Constructors
     MagicalContainer::PrimeIterator::PrimeIterator(const MagicalContainer& container):container(container), index(0){
-
     }
-    
     
     MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator& other):container(other.container), index(other.index){}
+    
     // Destructor
     MagicalContainer::PrimeIterator::~PrimeIterator(){}
-
-    bool MagicalContainer::PrimeIterator::isPrime(int number){
-        if (number < 2)
-        return false;
-
-        for (int i = 2; i <= sqrt(number); ++i)
-        {
-            if (number % i == 0)
-                return false;
-        }
-        return true;
-    }
 
     // Operators
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator=(const PrimeIterator& other){
@@ -242,53 +247,34 @@ namespace ariel{
         return index<other.index;
     }
     int MagicalContainer::PrimeIterator::operator*(){
-        // if (index >= container.container.size()) {
-        //     throw runtime_error("Iterator out of range");
-        // }
+        if (index >= this->container.primes.size()) {
+            throw runtime_error("Iterator out of range in *");
+        }
+        
+        // Create a copy of the container's elements
+        vector<int> sortedElements = container.primes;
 
-        // // Create a copy of the container's elements
-        // vector<int> sortedElements = container.container;
+        // Sort the elements in ascending order
+        sort(sortedElements.begin(), sortedElements.end());
 
-        // // Sort the elements in ascending order
-        // sort(sortedElements.begin(), sortedElements.end());
-
-        // // Return the element at the current index
-        // return sortedElements[static_cast<std::vector<int>::size_type>(index)];
-
-        if (index >= container.size() || !isPrime(container.container[static_cast<std::vector<int>::size_type>(index)]))
-    {
-        throw std::runtime_error("Iterator out of range");
-    }
-    
-    std::vector<int> sortedElements = container.container;
-    std::sort(sortedElements.begin(), sortedElements.end());
-    
-    return sortedElements[static_cast<std::vector<int>::size_type>(index)];
-    }
-    vector<int> MagicalContainer::PrimeIterator::getContainer(){
-        return container.container;
+        // Return the element at the current index
+        return sortedElements[static_cast<std::vector<int>::size_type>(index)];
     }
 
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator++() {
-        if (index+1 > container.container.size()) {
-                throw runtime_error("Iterator out of range");
-            }
-
-        index++;
-        while (index < container.size() && !isPrime(container.container[static_cast<std::vector<int>::size_type>(index)]))
-        {
-            index++;
+        if (index+1 > this->container.primes.size()) {
+            throw runtime_error("Iterator out of range");
         }
+        index++;
         return *this;
     }
-
 
     MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin(){
         index=0;
         return *this;
     }
     MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end(){
-        index=container.size();
+        index=container.primes.size();
         return *this;
     }
 

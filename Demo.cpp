@@ -31,7 +31,6 @@ int main() {
 
     MagicalContainer::SideCrossIterator crossIter(container);
 
-
     for (auto it = crossIter.begin(); it != crossIter.end(); ++it) {
         std::cout << *it << ' ';  // 2 25 3 17 9
     }

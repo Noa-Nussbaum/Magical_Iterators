@@ -10,13 +10,14 @@ namespace ariel{
     class MagicalContainer{
 
         vector<int> container;
+        vector<int> primes;
 
         public:
             // Default constructor
             MagicalContainer();
             // Copy constructor
             MagicalContainer(MagicalContainer& other);
-
+            bool isPrime(int number);
             void addElement(int element);
             void removeElement(int element);
             int size() const;
@@ -98,9 +99,6 @@ namespace ariel{
             PrimeIterator(const PrimeIterator& other);
             // Destructor
             ~PrimeIterator();
-
-            vector<int> getContainer();
-            bool isPrime(int number);
 
             // Operators
             PrimeIterator& operator=(const PrimeIterator& other);
