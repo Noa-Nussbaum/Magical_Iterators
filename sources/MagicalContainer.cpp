@@ -15,17 +15,22 @@ namespace ariel{
     // Copy constructor
     MagicalContainer::MagicalContainer(MagicalContainer& other){
         container=other.container;
-        primes=other.primes;
+        primePointers = other.primePointers;
     }
     MagicalContainer::~MagicalContainer(){}
 
-    void MagicalContainer::addElement(int element){
-        container.push_back(element);
-        // If it's prime, add it to the primes list
-        if(isPrime(element)){
-            primes.push_back(element);
+    void MagicalContainer::addElement(int element) {
+        int* newElement = new int(element); // Allocate memory for the element
+
+        container.push_back(element); // Add the element to the container
+
+        // If it's prime, add a pointer to it in the primePointers list
+        if (isPrime(element)) {
+            primePointers.push_back(newElement);
+            cout << "Add element " << element << endl;
         }
     }
+
     // Check if number is prime
     bool MagicalContainer::isPrime(int element){
         if (element < 2){
@@ -43,6 +48,16 @@ namespace ariel{
     void MagicalContainer::deleteElementByValue(std::vector<int>& vec, int value) {
         vec.erase(std::remove(vec.begin(), vec.end(), value), vec.end());
     }
+    void MagicalContainer::deleteElementByValue(std::vector<int*>& vec, int value) {
+        for (auto it = vec.begin(); it != vec.end(); ++it) {
+            if (**it == value) {
+                delete *it;
+                vec.erase(it);
+                break;
+            }
+        }
+    }
+
 
     void MagicalContainer::removeElement(int element){
         bool answer = false;
@@ -54,7 +69,8 @@ namespace ariel{
         for(auto i = container.begin(); i!=container.end(); i++){
             if(*i == element){
                 container.erase(i);
-                deleteElementByValue(primes,element);
+                deleteElementByValue(primePointers,element);
+                // deleteElementByValue(primes,element);
                 answer = true;
             }
         }
@@ -263,21 +279,29 @@ namespace ariel{
     bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator& other) const{
         return index<other.index;
     }
-    int MagicalContainer::PrimeIterator::operator*(){
-        // Check if in range
-        if (index >= this->container.primes.size()) {
-            throw runtime_error("Iterator out of range in *");
+
+    int MagicalContainer::PrimeIterator::operator*() {
+        if (index >= container.primePointers.size()) {
+            throw runtime_error("Iterator out of range in operator*");
         }
-        
-        // Sort before returning
-        vector<int> sorted = container.primes;
-        sort(sorted.begin(), sorted.end());
-        return sorted[static_cast<std::vector<int>::size_type>(index)];
+
+        // Create a copy of the container's prime values
+        vector<int> sortedElements;
+        sortedElements.reserve(container.primePointers.size());
+        for (int* ptr : container.primePointers) {
+            sortedElements.push_back(*ptr);
+        }
+
+        // Sort the prime values in ascending order
+        sort(sortedElements.begin(), sortedElements.end());
+
+        // Return the element at the current index
+        return sortedElements[static_cast<std::vector<int>::size_type>(index)];
     }
 
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator++() {
         // Make sure in range
-        if (index+1 > this->container.primes.size()) {
+        if (index+1 > this->container.primePointers.size()) {
             throw runtime_error("Iterator out of range");
         }
         // If in range increment
@@ -290,9 +314,11 @@ namespace ariel{
         index=0;
         return *this;
     }
+
+
     MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end(){
         // End here is the size of the vector
-        index=container.primes.size();
+        index=container.primePointers.size();
         return *this;
     }
 

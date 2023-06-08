@@ -10,7 +10,7 @@ namespace ariel{
     class MagicalContainer{
 
         vector<int> container;
-        vector<int> primes;
+        vector<int*> primePointers;
 
         public:
             // Default constructor
@@ -30,7 +30,9 @@ namespace ariel{
             // Destructor
             ~MagicalContainer();
 
+            void deleteElementByValue(std::vector<int*>& vec, int value);
             void deleteElementByValue(std::vector<int>& vec, int value);
+
 
             bool isPrime(int number);
             void addElement(int element);
